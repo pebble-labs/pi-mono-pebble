@@ -4,16 +4,19 @@ import type {
 	ChatCompletionChunk,
 	ChatCompletionContentPart,
 	ChatCompletionContentPartImage,
+	ChatCompletionContentPartInputAudio,
 	ChatCompletionContentPartText,
 	ChatCompletionDeveloperMessageParam,
 	ChatCompletionMessageParam,
 	ChatCompletionSystemMessageParam,
 	ChatCompletionToolMessageParam,
+	ChatCompletionUserMessageParam,
 } from "openai/resources/chat/completions.js";
 import { getEnvApiKey } from "../env-api-keys.js";
 import { calculateCost, supportsXhigh } from "../models.js";
 import type {
 	AssistantMessage,
+	AudioContent,
 	CacheRetention,
 	Context,
 	ImageContent,
@@ -29,6 +32,7 @@ import type {
 	Tool,
 	ToolCall,
 	ToolResultMessage,
+	UserContent,
 } from "../types.js";
 import { AssistantMessageEventStream } from "../utils/event-stream.js";
 import { headersToRecord } from "../utils/headers.js";
@@ -94,6 +98,32 @@ type ChatCompletionTextPartWithCacheControl = ChatCompletionContentPartText & {
 	cache_control?: OpenAICompatCacheControl;
 };
 
+type ChatCompletionContentPartProviderAudio = Omit<ChatCompletionContentPartInputAudio, "input_audio"> & {
+	input_audio: {
+		data: string;
+		format: AudioContent["format"];
+	};
+};
+
+type ChatCompletionContentPartWithProviderAudio =
+	| Exclude<ChatCompletionContentPart, ChatCompletionContentPartInputAudio>
+	| ChatCompletionContentPartProviderAudio;
+
+type ChatCompletionUserMessageParamWithProviderAudio = Omit<ChatCompletionUserMessageParam, "content"> & {
+	content: string | ChatCompletionContentPartWithProviderAudio[];
+};
+
+type ChatCompletionMessageParamWithProviderAudio =
+	| Exclude<ChatCompletionMessageParam, ChatCompletionUserMessageParam>
+	| ChatCompletionUserMessageParamWithProviderAudio;
+
+type ChatCompletionCreateParamsStreamingWithProviderAudio = Omit<
+	OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
+	"messages"
+> & {
+	messages: ChatCompletionMessageParamWithProviderAudio[];
+};
+
 type ChatCompletionToolWithCacheControl = OpenAI.Chat.Completions.ChatCompletionTool & {
 	cache_control?: OpenAICompatCacheControl;
 };
@@ -143,7 +173,7 @@ export const streamOpenAICompletions: StreamFunction<"openai-completions", OpenA
 			let params = buildParams(model, context, options, compat, cacheRetention);
 			const nextParams = await options?.onPayload?.(params, model);
 			if (nextParams !== undefined) {
-				params = nextParams as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming;
+				params = nextParams as ChatCompletionCreateParamsStreamingWithProviderAudio;
 			}
 			const requestOptions = {
 				...(options?.signal ? { signal: options.signal } : {}),
@@ -151,7 +181,7 @@ export const streamOpenAICompletions: StreamFunction<"openai-completions", OpenA
 				...(options?.maxRetries !== undefined ? { maxRetries: options.maxRetries } : {}),
 			};
 			const { data: openaiStream, response } = await client.chat.completions
-				.create(params, requestOptions)
+				.create(params as unknown as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming, requestOptions)
 				.withResponse();
 			await options?.onResponse?.({ status: response.status, headers: headersToRecord(response.headers) }, model);
 			stream.push({ type: "start", partial: output });
@@ -481,11 +511,11 @@ function buildParams(
 	options?: OpenAICompletionsOptions,
 	compat: ResolvedOpenAICompletionsCompat = getCompat(model),
 	cacheRetention: CacheRetention = resolveCacheRetention(options?.cacheRetention),
-) {
+): ChatCompletionCreateParamsStreamingWithProviderAudio {
 	const messages = convertMessages(model, context, compat);
 	const cacheControl = getCompatCacheControl(compat, cacheRetention);
 
-	const params: OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming = {
+	const params: ChatCompletionCreateParamsStreamingWithProviderAudio = {
 		model: model.id,
 		messages,
 		stream: true,
@@ -603,7 +633,7 @@ function getCompatCacheControl(
 }
 
 function applyAnthropicCacheControl(
-	messages: ChatCompletionMessageParam[],
+	messages: ChatCompletionMessageParamWithProviderAudio[],
 	tools: OpenAI.Chat.Completions.ChatCompletionTool[] | undefined,
 	cacheControl: OpenAICompatCacheControl,
 ): void {
@@ -613,7 +643,7 @@ function applyAnthropicCacheControl(
 }
 
 function addCacheControlToSystemPrompt(
-	messages: ChatCompletionMessageParam[],
+	messages: ChatCompletionMessageParamWithProviderAudio[],
 	cacheControl: OpenAICompatCacheControl,
 ): void {
 	for (const message of messages) {
@@ -625,7 +655,7 @@ function addCacheControlToSystemPrompt(
 }
 
 function addCacheControlToLastConversationMessage(
-	messages: ChatCompletionMessageParam[],
+	messages: ChatCompletionMessageParamWithProviderAudio[],
 	cacheControl: OpenAICompatCacheControl,
 ): void {
 	for (let i = messages.length - 1; i >= 0; i--) {
@@ -658,7 +688,7 @@ function addCacheControlToInstructionMessage(
 }
 
 function addCacheControlToMessage(
-	message: ChatCompletionMessageParam,
+	message: ChatCompletionMessageParamWithProviderAudio,
 	cacheControl: OpenAICompatCacheControl,
 ): boolean {
 	if (message.role === "user" || message.role === "assistant") {
@@ -671,7 +701,7 @@ function addCacheControlToTextContent(
 	message:
 		| ChatCompletionInstructionMessageParam
 		| ChatCompletionAssistantMessageParam
-		| Extract<ChatCompletionMessageParam, { role: "user" }>,
+		| ChatCompletionUserMessageParamWithProviderAudio,
 	cacheControl: OpenAICompatCacheControl,
 ): boolean {
 	const content = message.content;
@@ -709,8 +739,8 @@ export function convertMessages(
 	model: Model<"openai-completions">,
 	context: Context,
 	compat: ResolvedOpenAICompletionsCompat,
-): ChatCompletionMessageParam[] {
-	const params: ChatCompletionMessageParam[] = [];
+): ChatCompletionMessageParamWithProviderAudio[] {
+	const params: ChatCompletionMessageParamWithProviderAudio[] = [];
 
 	const normalizeToolCallId = (id: string): string => {
 		// Handle pipe-separated IDs from OpenAI Responses API
@@ -755,21 +785,31 @@ export function convertMessages(
 					content: sanitizeSurrogates(msg.content),
 				});
 			} else {
-				const content: ChatCompletionContentPart[] = msg.content.map((item): ChatCompletionContentPart => {
-					if (item.type === "text") {
+				const content: ChatCompletionContentPartWithProviderAudio[] = msg.content.map(
+					(item: UserContent): ChatCompletionContentPartWithProviderAudio => {
+						if (item.type === "text") {
+							return {
+								type: "text",
+								text: sanitizeSurrogates(item.text),
+							} satisfies ChatCompletionContentPartText;
+						}
+						if (item.type === "image") {
+							return {
+								type: "image_url",
+								image_url: {
+									url: `data:${item.mimeType};base64,${item.data}`,
+								},
+							} satisfies ChatCompletionContentPartImage;
+						}
 						return {
-							type: "text",
-							text: sanitizeSurrogates(item.text),
-						} satisfies ChatCompletionContentPartText;
-					} else {
-						return {
-							type: "image_url",
-							image_url: {
-								url: `data:${item.mimeType};base64,${item.data}`,
+							type: "input_audio",
+							input_audio: {
+								data: item.data,
+								format: item.format,
 							},
-						} satisfies ChatCompletionContentPartImage;
-					}
-				});
+						} satisfies ChatCompletionContentPartProviderAudio;
+					},
+				);
 				if (content.length === 0) continue;
 				params.push({
 					role: "user",

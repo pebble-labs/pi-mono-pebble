@@ -4,6 +4,7 @@ import type {
 	TextContent,
 	ToolCall,
 	ToolResultMessage as ToolResultMessageType,
+	UserContent,
 	UserMessage as UserMessageType,
 } from "@mariozechner/pi-ai";
 import { html, LitElement, type TemplateResult } from "lit";
@@ -17,7 +18,7 @@ import type { AgentTool } from "@mariozechner/pi-agent-core";
 
 export type UserMessageWithAttachments = {
 	role: "user-with-attachments";
-	content: string | (TextContent | ImageContent)[];
+	content: string | UserContent[];
 	timestamp: number;
 	attachments?: Attachment[];
 };
@@ -357,7 +358,7 @@ export function defaultConvertToLlm(messages: AgentMessage[]): Message[] {
 		.map((m): Message | null => {
 			// Convert user-with-attachments to user message with content blocks
 			if (isUserMessageWithAttachments(m)) {
-				const textContent: (TextContent | ImageContent)[] =
+				const textContent: UserContent[] =
 					typeof m.content === "string" ? [{ type: "text", text: m.content }] : [...m.content];
 
 				if (m.attachments) {

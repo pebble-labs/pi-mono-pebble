@@ -488,12 +488,16 @@ function toChatMessages(messages: Message[], supportsImages: boolean): ChatCompl
 				continue;
 			}
 			const hadImages = msg.content.some((item) => item.type === "image");
-			const content: ContentChunk[] = msg.content
-				.filter((item) => item.type === "text" || supportsImages)
-				.map((item) => {
-					if (item.type === "text") return { type: "text", text: sanitizeSurrogates(item.text) };
-					return { type: "image_url", imageUrl: `data:${item.mimeType};base64,${item.data}` };
-				});
+			const content: ContentChunk[] = msg.content.flatMap((item): ContentChunk[] => {
+				if (item.type === "text") return [{ type: "text", text: sanitizeSurrogates(item.text) }];
+				if (item.type === "image" && supportsImages) {
+					return [{ type: "image_url", imageUrl: `data:${item.mimeType};base64,${item.data}` }];
+				}
+				if (item.type === "audio") {
+					return [{ type: "text", text: "(audio omitted: Mistral serialization is not configured for audio)" }];
+				}
+				return [];
+			});
 			if (content.length > 0) {
 				result.push({ role: "user", content });
 				continue;

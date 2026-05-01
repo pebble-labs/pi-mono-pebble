@@ -2,10 +2,12 @@ import { registerApiProvider, unregisterApiProviders } from "../api-registry.js"
 import type {
 	AssistantMessage,
 	AssistantMessageEventStream,
+	AudioContent,
 	Context,
 	ImageContent,
 	Message,
 	Model,
+	ModelInputCapability,
 	SimpleStreamOptions,
 	StreamFunction,
 	StreamOptions,
@@ -38,7 +40,7 @@ export interface FauxModelDefinition {
 	id: string;
 	name?: string;
 	reasoning?: boolean;
-	input?: ("text" | "image")[];
+	input?: ModelInputCapability[];
 	cost?: { input: number; output: number; cacheRead: number; cacheWrite: number };
 	contextWindow?: number;
 	maxTokens?: number;
@@ -133,7 +135,7 @@ function randomId(prefix: string): string {
 	return `${prefix}:${Date.now()}:${Math.random().toString(36).slice(2)}`;
 }
 
-function contentToText(content: string | Array<TextContent | ImageContent>): string {
+function contentToText(content: string | Array<TextContent | ImageContent | AudioContent>): string {
 	if (typeof content === "string") {
 		return content;
 	}
@@ -141,6 +143,9 @@ function contentToText(content: string | Array<TextContent | ImageContent>): str
 		.map((block) => {
 			if (block.type === "text") {
 				return block.text;
+			}
+			if (block.type === "audio") {
+				return `[audio:${block.mimeType}:${block.format}:${block.data.length}]`;
 			}
 			return `[image:${block.mimeType}:${block.data.length}]`;
 		})
@@ -409,7 +414,7 @@ export function registerFauxProvider(options: RegisterFauxProviderOptions = {}):
 					id: DEFAULT_MODEL_ID,
 					name: DEFAULT_MODEL_NAME,
 					reasoning: false,
-					input: ["text", "image"] as ("text" | "image")[],
+					input: ["text", "image"] as ModelInputCapability[],
 					cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 					contextWindow: 128000,
 					maxTokens: 16384,

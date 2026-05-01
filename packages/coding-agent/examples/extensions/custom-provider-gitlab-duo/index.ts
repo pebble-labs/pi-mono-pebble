@@ -15,6 +15,7 @@ import {
 	type Context,
 	createAssistantMessageEventStream,
 	type Model,
+	type ModelInputCapability,
 	type OAuthCredentials,
 	type OAuthLoginCallbacks,
 	type SimpleStreamOptions,
@@ -49,7 +50,7 @@ interface GitLabModel {
 	backend: Backend;
 	baseUrl: string;
 	reasoning: boolean;
-	input: ("text" | "image")[];
+	input: ModelInputCapability[];
 	cost: { input: number; output: number; cacheRead: number; cacheWrite: number };
 	contextWindow: number;
 	maxTokens: number;

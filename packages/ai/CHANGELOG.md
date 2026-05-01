@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added `AudioContent` user-message blocks, the `audio` model input capability, and OpenAI-compatible `input_audio` serialization for audio-capable chat models.
+
 ## [0.71.1] - 2026-05-01
 
 ### Added

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added audio media support to `Agent.prompt()` by accepting `AudioContent` blocks alongside image blocks for string prompts.
+
 ## [0.71.1] - 2026-05-01
 
 ## [0.71.0] - 2026-04-30

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added audio user-content support to extension message APIs and custom model input capability configuration.
+
 ## [0.71.1] - 2026-05-01
 
 ### Added

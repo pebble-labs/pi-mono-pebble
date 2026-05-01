@@ -22,11 +22,13 @@ import type {
 	Context,
 	ImageContent,
 	Model,
+	ModelInputCapability,
 	OAuthCredentials,
 	OAuthLoginCallbacks,
 	SimpleStreamOptions,
 	TextContent,
 	ToolResultMessage,
+	UserContent,
 } from "@mariozechner/pi-ai";
 import type {
 	AutocompleteItem,
@@ -374,10 +376,7 @@ export interface ReplacedSessionContext extends ExtensionCommandContext {
 		options?: { triggerTurn?: boolean; deliverAs?: "steer" | "followUp" | "nextTurn" },
 	): Promise<void>;
 
-	sendUserMessage(
-		content: string | (TextContent | ImageContent)[],
-		options?: { deliverAs?: "steer" | "followUp" },
-	): Promise<void>;
+	sendUserMessage(content: string | UserContent[], options?: { deliverAs?: "steer" | "followUp" }): Promise<void>;
 }
 
 // ============================================================================
@@ -1184,10 +1183,7 @@ export interface ExtensionAPI {
 	 * Send a user message to the agent. Always triggers a turn.
 	 * When the agent is streaming, use deliverAs to specify how to queue the message.
 	 */
-	sendUserMessage(
-		content: string | (TextContent | ImageContent)[],
-		options?: { deliverAs?: "steer" | "followUp" },
-	): void;
+	sendUserMessage(content: string | UserContent[], options?: { deliverAs?: "steer" | "followUp" }): void;
 
 	/** Append a custom entry to the session for state persistence (not sent to LLM). */
 	appendEntry<T = unknown>(customType: string, data?: T): void;
@@ -1358,7 +1354,7 @@ export interface ProviderModelConfig {
 	/** Whether the model supports extended thinking. */
 	reasoning: boolean;
 	/** Supported input types. */
-	input: ("text" | "image")[];
+	input: ModelInputCapability[];
 	/** Cost per token (for tracking, can be 0). */
 	cost: { input: number; output: number; cacheRead: number; cacheWrite: number };
 	/** Maximum context window size in tokens. */
@@ -1406,7 +1402,7 @@ export type SendMessageHandler = <T = unknown>(
 ) => void;
 
 export type SendUserMessageHandler = (
-	content: string | (TextContent | ImageContent)[],
+	content: string | UserContent[],
 	options?: { deliverAs?: "steer" | "followUp" },
 ) => void;
 

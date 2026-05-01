@@ -147,6 +147,12 @@ export function convertResponsesMessages<TApi extends Api>(
 							text: sanitizeSurrogates(item.text),
 						} satisfies ResponseInputText;
 					}
+					if (item.type === "audio") {
+						return {
+							type: "input_text",
+							text: "(audio omitted: OpenAI Responses serialization is not configured for audio)",
+						} satisfies ResponseInputText;
+					}
 					return {
 						type: "input_image",
 						detail: "auto",

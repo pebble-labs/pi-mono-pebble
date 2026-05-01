@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { Agent, type AgentMessage, type ThinkingLevel } from "@mariozechner/pi-agent-core";
-import { type Message, type Model, streamSimple } from "@mariozechner/pi-ai";
+import { type Message, type Model, streamSimple, type ToolResultContent, type UserContent } from "@mariozechner/pi-ai";
 import { getAgentDir } from "../config.js";
 import { AgentSession } from "./agent-session.js";
 import { formatNoModelsAvailableMessage } from "./auth-guidance.js";
@@ -285,28 +285,49 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 		}
 		// Filter out ImageContent from all messages, replacing with text placeholder
 		return converted.map((msg) => {
-			if (msg.role === "user" || msg.role === "toolResult") {
-				const content = msg.content;
-				if (Array.isArray(content)) {
-					const hasImages = content.some((c) => c.type === "image");
-					if (hasImages) {
-						const filteredContent = content
-							.map((c) =>
-								c.type === "image" ? { type: "text" as const, text: "Image reading is disabled." } : c,
-							)
-							.filter(
-								(c, i, arr) =>
-									// Dedupe consecutive "Image reading is disabled." texts
-									!(
-										c.type === "text" &&
-										c.text === "Image reading is disabled." &&
-										i > 0 &&
-										arr[i - 1].type === "text" &&
-										(arr[i - 1] as { type: "text"; text: string }).text === "Image reading is disabled."
-									),
-							);
-						return { ...msg, content: filteredContent };
-					}
+			if (msg.role === "user" && Array.isArray(msg.content)) {
+				const hasImages = msg.content.some((c) => c.type === "image");
+				if (hasImages) {
+					const filteredContent = msg.content
+						.map(
+							(c): UserContent =>
+								c.type === "image" ? { type: "text", text: "Image reading is disabled." } : c,
+						)
+						.filter(
+							(c, i, arr) =>
+								// Dedupe consecutive "Image reading is disabled." texts
+								!(
+									c.type === "text" &&
+									c.text === "Image reading is disabled." &&
+									i > 0 &&
+									arr[i - 1].type === "text" &&
+									(arr[i - 1] as { type: "text"; text: string }).text === "Image reading is disabled."
+								),
+						);
+					return { ...msg, content: filteredContent };
+				}
+			}
+
+			if (msg.role === "toolResult") {
+				const hasImages = msg.content.some((c) => c.type === "image");
+				if (hasImages) {
+					const filteredContent = msg.content
+						.map(
+							(c): ToolResultContent =>
+								c.type === "image" ? { type: "text", text: "Image reading is disabled." } : c,
+						)
+						.filter(
+							(c, i, arr) =>
+								// Dedupe consecutive "Image reading is disabled." texts
+								!(
+									c.type === "text" &&
+									c.text === "Image reading is disabled." &&
+									i > 0 &&
+									arr[i - 1].type === "text" &&
+									(arr[i - 1] as { type: "text"; text: string }).text === "Image reading is disabled."
+								),
+						);
+					return { ...msg, content: filteredContent };
 				}
 			}
 			return msg;

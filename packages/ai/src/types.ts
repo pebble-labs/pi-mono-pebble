@@ -179,6 +179,18 @@ export interface ImageContent {
 	mimeType: string; // e.g., "image/jpeg", "image/png"
 }
 
+export type AudioFormat = "wav" | "mp3" | "aiff" | "aac" | "ogg" | "flac" | "m4a" | "pcm16" | "pcm24" | (string & {});
+
+export interface AudioContent {
+	type: "audio";
+	data: string; // base64 encoded audio data
+	mimeType: string; // e.g., "audio/wav", "audio/mpeg", "audio/mp4"
+	format: AudioFormat; // e.g., "wav", "mp3", "m4a"
+}
+
+export type UserContent = TextContent | ImageContent | AudioContent;
+export type ToolResultContent = TextContent | ImageContent;
+
 export interface ToolCall {
 	type: "toolCall";
 	id: string;
@@ -206,7 +218,7 @@ export type StopReason = "stop" | "length" | "toolUse" | "error" | "aborted";
 
 export interface UserMessage {
 	role: "user";
-	content: string | (TextContent | ImageContent)[];
+	content: string | UserContent[];
 	timestamp: number; // Unix timestamp in milliseconds
 }
 
@@ -228,7 +240,7 @@ export interface ToolResultMessage<TDetails = any> {
 	role: "toolResult";
 	toolCallId: string;
 	toolName: string;
-	content: (TextContent | ImageContent)[]; // Supports text and images
+	content: ToolResultContent[]; // Supports text and images
 	details?: TDetails;
 	isError: boolean;
 	timestamp: number; // Unix timestamp in milliseconds
@@ -424,6 +436,8 @@ export interface VercelGatewayRouting {
 	order?: string[];
 }
 
+export type ModelInputCapability = "text" | "image" | "audio";
+
 // Model interface for the unified model system
 export interface Model<TApi extends Api> {
 	id: string;
@@ -432,7 +446,7 @@ export interface Model<TApi extends Api> {
 	provider: Provider;
 	baseUrl: string;
 	reasoning: boolean;
-	input: ("text" | "image")[];
+	input: ModelInputCapability[];
 	cost: {
 		input: number; // $/million tokens
 		output: number; // $/million tokens

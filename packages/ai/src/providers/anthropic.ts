@@ -14,7 +14,6 @@ import type {
 	AssistantMessage,
 	CacheRetention,
 	Context,
-	ImageContent,
 	Message,
 	Model,
 	SimpleStreamOptions,
@@ -25,6 +24,7 @@ import type {
 	ThinkingContent,
 	Tool,
 	ToolCall,
+	ToolResultContent,
 	ToolResultMessage,
 } from "../types.js";
 import { AssistantMessageEventStream } from "../utils/event-stream.js";
@@ -108,7 +108,7 @@ const fromClaudeCodeName = (name: string, tools?: Tool[]) => {
 /**
  * Convert content blocks to Anthropic API format
  */
-function convertContentBlocks(content: (TextContent | ImageContent)[]):
+function convertContentBlocks(content: ToolResultContent[]):
 	| string
 	| Array<
 			| { type: "text"; text: string }
@@ -1007,16 +1007,21 @@ function convertMessages(
 							type: "text",
 							text: sanitizeSurrogates(item.text),
 						};
-					} else {
+					}
+					if (item.type === "audio") {
 						return {
-							type: "image",
-							source: {
-								type: "base64",
-								media_type: item.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
-								data: item.data,
-							},
+							type: "text",
+							text: "(audio omitted: Anthropic serialization is not configured for audio)",
 						};
 					}
+					return {
+						type: "image",
+						source: {
+							type: "base64",
+							media_type: item.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
+							data: item.data,
+						},
+					};
 				});
 				const filteredBlocks = blocks.filter((b) => {
 					if (b.type === "text") {

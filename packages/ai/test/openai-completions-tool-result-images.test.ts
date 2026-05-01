@@ -55,6 +55,49 @@ function buildToolResult(toolCallId: string, timestamp: number): ToolResultMessa
 }
 
 describe("openai-completions convertMessages", () => {
+	it("serializes user audio content as input_audio", () => {
+		const { compat: _compat, ...baseModel } = getModel("openai", "gpt-4o-mini");
+		const model: Model<"openai-completions"> = {
+			...baseModel,
+			api: "openai-completions",
+			provider: "openrouter",
+			baseUrl: "https://openrouter.ai/api/v1",
+			input: ["text", "audio"],
+		};
+
+		const now = Date.now();
+		const context: Context = {
+			messages: [
+				{
+					role: "user",
+					content: [
+						{ type: "text", text: "Please summarize this voice memo." },
+						{ type: "audio", data: "ZmFrZQ==", mimeType: "audio/mp4", format: "m4a" },
+					],
+					timestamp: now,
+				},
+			],
+		};
+
+		const messages = convertMessages(model, context, compat);
+
+		expect(messages).toEqual([
+			{
+				role: "user",
+				content: [
+					{ type: "text", text: "Please summarize this voice memo." },
+					{
+						type: "input_audio",
+						input_audio: {
+							data: "ZmFrZQ==",
+							format: "m4a",
+						},
+					},
+				],
+			},
+		]);
+	});
+
 	it("batches tool-result images after consecutive tool results", () => {
 		const { compat: _compat, ...baseModel } = getModel("openai", "gpt-4o-mini");
 		const model: Model<"openai-completions"> = {

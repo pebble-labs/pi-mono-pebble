@@ -135,32 +135,22 @@ function createThinkingLevelEntry(thinkingLevel: string): ThinkingLevelChangeEnt
 }
 
 function extractText(messages: AgentMessage[]): string {
+	const extractTextBlocks = (blocks: ReadonlyArray<{ type: string; text?: string }>) =>
+		blocks.flatMap((block) => (block.type === "text" && block.text ? [block.text] : [])).join(" ");
+
 	return messages
 		.map((message) => {
 			switch (message.role) {
 				case "user":
-					return typeof message.content === "string"
-						? message.content
-						: message.content
-								.filter((block): block is { type: "text"; text: string } => block.type === "text")
-								.map((block) => block.text)
-								.join(" ");
+					return typeof message.content === "string" ? message.content : extractTextBlocks(message.content);
 				case "assistant":
-					return message.content
-						.filter((block): block is { type: "text"; text: string } => block.type === "text")
-						.map((block) => block.text)
-						.join(" ");
+					return extractTextBlocks(message.content);
 				case "branchSummary":
 				case "compactionSummary":
 					return message.summary;
 				case "custom":
 				case "toolResult":
-					return typeof message.content === "string"
-						? message.content
-						: message.content
-								.filter((block): block is { type: "text"; text: string } => block.type === "text")
-								.map((block) => block.text)
-								.join(" ");
+					return typeof message.content === "string" ? message.content : extractTextBlocks(message.content);
 				case "bashExecution":
 					return `${message.command}\n${message.output}`;
 				default:
