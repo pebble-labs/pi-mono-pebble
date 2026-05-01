@@ -4364,7 +4364,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.075,
 				output: 0.3,
@@ -4381,7 +4381,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.0375,
 				output: 0.15,
@@ -4398,7 +4398,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 5,
@@ -4415,7 +4415,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.1,
 				output: 0.4,
@@ -4432,7 +4432,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.075,
 				output: 0.3,
@@ -4449,7 +4449,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.3,
 				output: 2.5,
@@ -4466,7 +4466,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.1,
 				output: 0.4,
@@ -4483,7 +4483,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.1,
 				output: 0.4,
@@ -4500,7 +4500,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.1,
 				output: 0.4,
@@ -4517,7 +4517,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.15,
 				output: 0.6,
@@ -4534,7 +4534,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.15,
 				output: 0.6,
@@ -4551,7 +4551,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.3,
 				output: 2.5,
@@ -4568,7 +4568,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -4585,7 +4585,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -4602,7 +4602,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -4619,7 +4619,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.5,
 				output: 3,
@@ -4636,7 +4636,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
@@ -4653,7 +4653,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.25,
 				output: 1.5,
@@ -4670,7 +4670,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
@@ -4687,7 +4687,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
@@ -4704,7 +4704,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.3,
 				output: 2.5,
@@ -4721,7 +4721,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.1,
 				output: 0.4,
@@ -4738,7 +4738,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.5,
 				output: 2,
@@ -4755,7 +4755,7 @@ export const MODELS = {
 			provider: "google",
 			baseUrl: "https://generativelanguage.googleapis.com/v1beta",
 			reasoning: true,
-			input: ["text"],
+			input: ["text", "audio"],
 			cost: {
 				input: 0.5,
 				output: 2,
@@ -9178,14 +9178,14 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.09999999999999999,
 				output: 0.39999999999999997,
 				cacheRead: 0.024999999999999998,
 				cacheWrite: 0.08333333333333334,
 			},
-			contextWindow: 1000000,
+			contextWindow: 1048576,
 			maxTokens: 8192,
 		} satisfies Model<"openai-completions">,
 		"google/gemini-2.0-flash-lite-001": {
@@ -9195,7 +9195,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.075,
 				output: 0.3,
@@ -9212,7 +9212,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.3,
 				output: 2.5,
@@ -9229,7 +9229,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.09999999999999999,
 				output: 0.39999999999999997,
@@ -9246,7 +9246,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.09999999999999999,
 				output: 0.39999999999999997,
@@ -9263,7 +9263,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -9280,7 +9280,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -9297,7 +9297,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 1.25,
 				output: 10,
@@ -9314,7 +9314,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.5,
 				output: 3,
@@ -9331,7 +9331,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.25,
 				output: 1.5,
@@ -9348,7 +9348,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
@@ -9365,7 +9365,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
@@ -10113,7 +10113,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text"],
+			input: ["text", "audio"],
 			cost: {
 				input: 0.09999999999999999,
 				output: 0.3,
@@ -10300,7 +10300,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0,
 				output: 0,
@@ -10657,7 +10657,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text"],
+			input: ["text", "audio"],
 			cost: {
 				input: 2.5,
 				output: 10,
@@ -11082,7 +11082,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text"],
+			input: ["text", "audio"],
 			cost: {
 				input: 2.5,
 				output: 10,
@@ -11099,7 +11099,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: false,
-			input: ["text"],
+			input: ["text", "audio"],
 			cost: {
 				input: 0.6,
 				output: 2.4,
@@ -11354,7 +11354,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: -1000000,
 				output: -1000000,
@@ -12612,7 +12612,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.39999999999999997,
 				output: 2,
@@ -12646,7 +12646,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.39999999999999997,
 				output: 2,
@@ -12952,7 +12952,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 0.5,
 				output: 3,
@@ -12969,7 +12969,7 @@ export const MODELS = {
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 			reasoning: true,
-			input: ["text", "image"],
+			input: ["text", "image", "audio"],
 			cost: {
 				input: 2,
 				output: 12,
