@@ -7,6 +7,16 @@
 - Updated user message attachment content typing to accept shared `UserContent` blocks.
 - Updated web UI type-check configs to resolve workspace packages from source instead of generated `dist` declarations.
 
+## [0.74.0] - 2026-05-07
+
+## [0.73.1] - 2026-05-07
+
+## [0.73.0] - 2026-05-04
+
+## [0.72.1] - 2026-05-02
+
+## [0.72.0] - 2026-05-01
+
 ## [0.71.1] - 2026-05-01
 
 ## [0.71.0] - 2026-04-30
